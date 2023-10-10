@@ -30,7 +30,20 @@ def test_ssim():
     res = ssim(x, y, 3, window)
     print(res)
 
+def test_psnr():
+    import torch
+
+    from metrics import psnr
+
+    n = 1
+    x = torch.rand(n, 3, 256, 256)
+    y = torch.rand(n, 3, 256, 256)
+
+    res = psnr(x, y)
+    print(res)
+
 
 if __name__ == "__main__":
     test_lpips()
     test_ssim()
+    test_psnr()
