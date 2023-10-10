@@ -1,2 +1,2 @@
 # gaussian-splatting-pytorch
-Gaussian Splatting, re-implemented with PyTorch
+3D Gaussian Splatting, re-implemented with PyTorch
