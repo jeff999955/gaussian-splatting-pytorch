@@ -7,13 +7,13 @@ def test_lpips():
     from metrics import lpips
     from metrics.lpips import get_lpips_model
 
-    n = 1
+    n = 10
     x = torch.rand(n, 3, 256, 256)
     y = torch.rand(n, 3, 256, 256)
 
     model = get_lpips_model()
     res = lpips(x, y, model)
-    print(res.mean().item())
+    print(res)
 
 
 def test_ssim():
@@ -21,7 +21,7 @@ def test_ssim():
 
     from metrics import ssim
 
-    n = 1
+    n = 10
     x = torch.rand(n, 3, 256, 256)
     y = torch.rand(n, 3, 256, 256)
 
@@ -36,7 +36,7 @@ def test_psnr():
 
     from metrics import psnr
 
-    n = 1
+    n = 10
     x = torch.rand(n, 3, 256, 256)
     y = torch.rand(n, 3, 256, 256)
 
