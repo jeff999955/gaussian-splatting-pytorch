@@ -30,6 +30,7 @@ def test_ssim():
     res = ssim(x, y, 3, window)
     print(res)
 
+
 def test_psnr():
     import torch
 

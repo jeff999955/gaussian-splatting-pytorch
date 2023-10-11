@@ -6,18 +6,15 @@ from torch.autograd import Variable
 
 
 def gaussian(window_size, sigma):
-    mid_window = window_size // 2 
+    mid_window = window_size // 2
     sigma_sq_dbl = float(2 * sigma**2)
     gauss = torch.Tensor(
-        [
-            exp(-((x - mid_window) ** 2) / sigma_sq_dbl)
-            for x in range(window_size)
-        ]
+        [exp(-((x - mid_window) ** 2) / sigma_sq_dbl) for x in range(window_size)]
     )
     return gauss / gauss.sum()
 
 
-def create_window(window_size = 11, channel = 3):
+def create_window(window_size=11, channel=3):
     _1D_window = gaussian(window_size, 1.5).unsqueeze(1)
     _2D_window = _1D_window.mm(_1D_window.t()).float().unsqueeze(0).unsqueeze(0)
     window = Variable(
@@ -42,7 +39,6 @@ def ssim(
 
 
 def _ssim(img1, img2, window, window_size, channel, size_average=True):
-
     padding_size = window_size // 2
     mu1 = F.conv2d(img1, window, padding=padding_size, groups=channel)
     mu2 = F.conv2d(img2, window, padding=padding_size, groups=channel)
@@ -58,8 +54,7 @@ def _ssim(img1, img2, window, window_size, channel, size_average=True):
         F.conv2d(img2 * img2, window, padding=padding_size, groups=channel) - mu2_sq
     )
     sigma12 = (
-        F.conv2d(img1 * img2, window, padding=padding_size, groups=channel)
-        - mu1_mu2
+        F.conv2d(img1 * img2, window, padding=padding_size, groups=channel) - mu1_mu2
     )
 
     C1 = 0.01**2
