@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 
 from .modules.lpips import LPIPS
@@ -24,4 +25,4 @@ def lpips(
                         'alex' | 'squeeze' | 'vgg'. Default: 'alex'.
         version (str): the version of LPIPS. Default: 0.1.
     """
-    return evaluation_model(x, y)
+    return np.mean(evaluation_model(x, y).detach().cpu().numpy())
