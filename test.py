@@ -1,3 +1,6 @@
+import argparse
+
+from datasets.ScanNet import ScanNetDataset
 from metrics.ssim import create_window
 
 
@@ -44,7 +47,34 @@ def test_psnr():
     print(res)
 
 
+def test_ScanNetDataset():
+    args = argparse.Namespace(
+        root_path="/scratch-ssd/scans/scene0241_01", split_setting="pointnerf"
+    )
+    train_dataset = ScanNetDataset(args)
+    print("Path")
+    print(train_dataset.root_path)
+    print(train_dataset.image_path)
+    print(train_dataset.pose_path)
+
+    print("Size")
+    print(train_dataset.original_size)
+    print(train_dataset.target_size)
+
+    print("Intrinsics")
+    print(train_dataset.intrinsic)
+
+    print("Cameras")
+    print(len(train_dataset))
+    print(train_dataset[0])
+
+    print("Split")
+    print(train_dataset.split)
+    print(train_dataset.split_setting)
+
+    print("Point cloud")
+    print(train_dataset.point_cloud)
+
+
 if __name__ == "__main__":
-    test_lpips()
-    test_ssim()
-    test_psnr()
+    test_ScanNetDataset()
