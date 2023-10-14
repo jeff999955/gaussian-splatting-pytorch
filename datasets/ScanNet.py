@@ -46,7 +46,7 @@ class ScanNetDataset(BaseDataset):
         self.load_point_cloud()
 
     def __len__(self):
-        return len(self.train_cameras)
+        return len(self.cameras)
 
     def __getitem__(self, idx):
         return self.cameras[idx]
