@@ -1,9 +1,32 @@
+from typing import Literal
+
+import numpy as np
 from torch.utils.data import Dataset
+
+from dtypes import PointCloud
 
 
 class BaseDataset(Dataset):
-    train_cameras: list
-    test_cameras: list
+    root_path: str
+    image_path: str
+    pose_path: str
+
+    # Size, (w, h)
+    original_size: tuple[int, int]
+    target_size: tuple[int, int]
+
+    # Camera intrinsics
+    intrinsics: np.ndarray
+
+    # Cameras
+    cameras: list[dict]
+
+    # Dataset split
+    split: Literal["train", "test"]
+    split_setting: str
+
+    # Point cloud
+    point_cloud: PointCloud
 
     def __init__(self, args):
         raise NotImplementedError
