@@ -15,8 +15,8 @@ class BaseDataset(Dataset):
     original_size: tuple[int, int]
     target_size: tuple[int, int]
 
-    # Camera intrinsics
-    intrinsics: np.ndarray
+    # Camera intrinsic
+    intrinsic: np.ndarray
 
     # Cameras
     cameras: list[dict]
