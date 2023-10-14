@@ -1,3 +1,4 @@
+import argparse
 import glob
 import os
 from copy import deepcopy
@@ -39,6 +40,7 @@ class ScanNetDataset(BaseDataset):
         self.read_cameras()
 
         self.split = split
+        self.split_setting = args.split_setting
         self.set_train_test_split()
 
         self.load_point_cloud()
@@ -85,38 +87,36 @@ class ScanNetDataset(BaseDataset):
         self.intrinsic[1, :] *= self.target_size[1] / self.original_size[1]
 
     def load_point_cloud(self):
-        if self.loaded_iter:
-            self.model.load_ply(
-                os.path.join(
-                    self.model_path,
-                    "point_cloud",
-                    "iteration_" + str(self.loaded_iter),
-                    "point_cloud.ply",
-                )
-            )
+        ply_path = os.path.join(self.root_path, "pcd.ply")
+        plydata = PlyData.read(ply_path)
+        vertices = plydata["vertex"]
+        positions = np.vstack([vertices["x"], vertices["y"], vertices["z"]]).T
+        colors = (
+            np.vstack([vertices["red"], vertices["green"], vertices["blue"]]).T / 255.0
+        )
+        try:
+            normals = np.vstack([vertices["nx"], vertices["ny"], vertices["nz"]]).T
+        except:
+            normals = np.zeros_like(positions)
+
+        self.point_cloud = PointCloud(points=positions, colors=colors, normals=normals)
+
+        # TODO: Determine whether to use camera extent or not when loading point cloud
+        # self.model.create_from_pcd(point_cloud, self.cameras_extent)
+
+        # TODO: Load point cloud from saved checkpoint
+        # if self.loaded_iter:
+        #     self.model.load_ply(
+        #         os.path.join(
+        #             self.model_path,
+        #             "point_cloud",
+        #             "iteration_" + str(self.loaded_iter),
+        #             "point_cloud.ply",
+        #         )
+        #     )
         # TODO: Random Sample 100k points within the bounding box
         # elif args.random_init_points:
         #     n_points = scene_info.point_cloud.points.shape[0]
         #     point_cloud = BasicPointCloud.random(n_points)
         #     self.model.create_from_pcd(point_cloud, self.cameras_extent)
         #     print(f"Randomly initializing point cloud with {n_points} points!")
-        else:
-            ply_path = os.path.join(self.root_path, "pcd.ply")
-            plydata = PlyData.read(ply_path)
-            vertices = plydata["vertex"]
-            positions = np.vstack([vertices["x"], vertices["y"], vertices["z"]]).T
-            colors = (
-                np.vstack([vertices["red"], vertices["green"], vertices["blue"]]).T
-                / 255.0
-            )
-            try:
-                normals = np.vstack([vertices["nx"], vertices["ny"], vertices["nz"]]).T
-            except:
-                normals = np.zeros_like(positions)
-
-            self.point_cloud = PointCloud(
-                points=positions, colors=colors, normals=normals
-            )
-
-            # TODO: Determine whether to use camera extent or not when loading point cloud
-            # self.model.create_from_pcd(point_cloud, self.cameras_extent)
