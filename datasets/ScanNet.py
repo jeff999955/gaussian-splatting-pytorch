@@ -6,6 +6,8 @@ import numpy as np
 from PIL import Image
 from plyfile import PlyData
 
+from dtypes import PointCloud
+
 from .base import BaseDataset
 
 # In ScanNet, it provides pose (camera to world) not extrinsic matrix(world to camera).
@@ -112,7 +114,7 @@ class ScanNetDataset(BaseDataset):
             except:
                 normals = np.zeros_like(positions)
 
-            self.point_cloud = BasicPointCloud(
+            self.point_cloud = PointCloud(
                 points=positions, colors=colors, normals=normals
             )
 
