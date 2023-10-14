@@ -16,6 +16,3 @@ class BaseDataset(Dataset):
 
     def read_cameras(self):
         raise NotImplementedError
-
-    def getNerfppNorm(self):
-        raise NotImplementedError
